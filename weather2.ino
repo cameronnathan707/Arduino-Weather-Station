@@ -11,9 +11,7 @@
 #include <Adafruit_BMP280.h> //Temp/altitude
 
 
-// The control pins for the LCD can be assigned to any digital or
-// analog pins...but we'll use the analog pins as this allows us to
-// double up the pins with the touch screen (see the TFT paint example).
+// The control pins for the LCD 
 #define LCD_CS A3 // Chip Select goes to Analog 3
 #define LCD_CD A2 // Command/Data goes to Analog 2
 #define LCD_WR A1 // LCD Write goes to Analog 1
@@ -21,34 +19,33 @@
 #define LCD_RESET A4 
 
 // Color definitions
-#define BLACK       0x0000      /*   0,   0,   0 */
-#define NAVY        0x000F      /*   0,   0, 128 */
-#define DARKGREEN   0x03E0      /*   0, 128,   0 */
-#define DARKCYAN    0x03EF      /*   0, 128, 128 */
-#define MAROON      0x7800      /* 128,   0,   0 */
-#define PURPLE      0x780F      /* 128,   0, 128 */
-#define OLIVE       0x7BE0      /* 128, 128,   0 */
-#define LIGHTGREY   0xC618      /* 192, 192, 192 */
-#define DARKGREY    0x7BEF      /* 128, 128, 128 */
-#define BLUE        0x001F      /*   0,   0, 255 */
-#define GREEN       0x07E0      /*   0, 255,   0 */
-#define CYAN        0x07FF      /*   0, 255, 255 */
-#define RED         0xF800      /* 255,   0,   0 */
-#define MAGENTA     0xF81F      /* 255,   0, 255 */
-#define YELLOW      0xFFE0      /* 255, 255,   0 */
-#define WHITE       0xFFFF      /* 255, 255, 255 */
-#define ORANGE      0xFD20      /* 255, 165,   0 */
-#define GREENYELLOW 0xAFE5      /* 173, 255,  47 */
+#define BLACK       0x0000      
+#define NAVY        0x000F      
+#define DARKGREEN   0x03E0     
+#define DARKCYAN    0x03EF      
+#define MAROON      0x7800      
+#define PURPLE      0x780F      
+#define OLIVE       0x7BE0      
+#define LIGHTGREY   0xC618      
+#define DARKGREY    0x7BEF      
+#define BLUE        0x001F      
+#define GREEN       0x07E0      
+#define CYAN        0x07FF      
+#define RED         0xF800      
+#define MAGENTA     0xF81F      
+#define YELLOW      0xFFE0      
+#define WHITE       0xFFFF      
+#define ORANGE      0xFD20      
+#define GREENYELLOW 0xAFE5      
 #define PINK        0xF81F
 
 
 #define YP A3  // must be an analog pin
 #define XM A2  // must be an analog pin
-#define YM 9   // can be a digital pin
-#define XP 8   // can be a digital pin
+#define YM 9   
+#define XP 8   
 
 
-//Touch For New ILI9341 TP
 #define TS_MINX 120
 #define TS_MAXX 900
 
@@ -84,7 +81,7 @@ unsigned long currentMillis;
 const unsigned long period = 2500;   //the value is a number of milliseconds
 
 int currentPage;                     //Current Page indicator  "1" First Page,  "2" Second Page
-double setTemp = 19.00; //begining temp on boot
+double setTemp = 19.00;              //begining temp on boot
 
 void setup(void) {
 
@@ -148,24 +145,24 @@ void loop() {
     Serial.print("P X"); Serial.print(p.x);
     Serial.print("P Y"); Serial.print(p.y);
 
-    if (p.x >= 15 && p.x <= 40 && p.y >= 130 && p.y <= 220 && currentPage == 1) {
+    if (p.x >= 15 && p.x <= 40 && p.y >= 130 && p.y <= 220 && currentPage == 1) { //check button for touch
       Serial.println("Next Page Selected");
       currentPage = 2;
       thermostatScreen();
       readSensors();            
     }
-    else if (p.x >= 5 && p.x <= 30 && p.y >= 12 && p.y <= 55 && currentPage == 2) {
+    else if (p.x >= 5 && p.x <= 30 && p.y >= 12 && p.y <= 55 && currentPage == 2) {   //check button for touch
       Serial.println("Next Page Selected");
       currentPage = 1;       // First Page Default
       drawInitialScreen();
       readSensors();     
     }
-    else if (p.x >= 130 && p.x <= 230 && p.y >= 10 && p.y <= 50 && currentPage == 2) {
+    else if (p.x >= 130 && p.x <= 230 && p.y >= 10 && p.y <= 50 && currentPage == 2) {    //check button for touch
       Serial.println("Minus");
       setTemp--;
       readSensors();      
     }
-    else if (p.x >= 130 && p.x <= 230 && p.y >= 180 && p.y <= 225 && currentPage == 2) {
+    else if (p.x >= 130 && p.x <= 230 && p.y >= 180 && p.y <= 225 && currentPage == 2) {  //check button for touch
       Serial.println("Plus");
       setTemp++;
       readSensors();     
@@ -235,13 +232,14 @@ void thermostatScreen() { // prints out the static text on the thermostat
 
   buttons.initButton( &tft, 45, 100, 80, 80, WHITE, WHITE, DARKGREY, "-", 6 );
   buttons.drawButton(true);
+  
   buttons.initButton( &tft, 280, 100, 80, 80, WHITE, WHITE, DARKGREY, "+", 6 );
   buttons.drawButton(true);
 
 }
 
 
-void getIdentifierScreen() {
+void getIdentifierScreen() { //identift the right screen
 
   identifier = tft.readID();
   if (identifier == 0x9325) {
@@ -274,43 +272,44 @@ void   readSensors() {
     tft.setTextColor(WHITE);
     tft.setTextSize(2);
 
-    //Shows Temperature in Celsius
     tft.fillRect(158, 35, 90, 22, BLACK);
     tft.setCursor(160, 40);
     tft.print(bmp.readTemperature() - 2);
     tft.println(" C");
-
+    
+    tft.fillRect(158, 65, 90, 22, BLACK);
+    tft.setCursor(160, 65);
+    tft.print(DHT.temperature);
+    tft.println(" C");
+    
     tft.fillRect(158, 90, 90, 22, BLACK);
     tft.setCursor(160, 90);
     tft.print(DHT.humidity);
     tft.println(" %");
 
-    tft.fillRect(158, 65, 90, 22, BLACK);
-    tft.setCursor(160, 65);
-    tft.print(DHT.temperature);
-    tft.println(" C");
+    
 
     tft.fillRect(133, 115, 120, 22, BLACK);
     tft.setCursor(135, 115);
     tft.print(bmp.readPressure()/10);
     tft.println(" kPa");
 
-    tft.fillRect(133, 140, 50, 22, BLACK);
+    tft.fillRect(133, 140, 80, 22, BLACK);
     tft.setCursor(135, 140);
-    tft.print(uv.readIR());
+    tft.print(uv.readIR()/1000);
 
     tft.fillRect(133, 165, 50, 22, BLACK);
     tft.setCursor(135, 165);
-    tft.print(uv.readUV());
+    tft.print(uv.readUV()/100);
     
   }
   else {
     tft.setTextColor(BLACK);
     tft.setTextSize(3);
-    //Shows Temperature in Celsius
+   
     tft.drawRect(93, 75, 140, 60, WHITE);
     tft.fillRect(98, 80, 130, 50, CYAN);
-    //            x,y,x length, y length
+   
     tft.setCursor(103, 95);
     tft.print(setTemp);
     tft.println(" C");
