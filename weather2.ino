@@ -1,21 +1,31 @@
-// Libraries Declaration
+/* Arduino Weather Station 
+ *  by: Nathan Cameron
+ *  
+ *  Adapted from pcimule 
+ *  https://create.arduino.cc/projecthub/pcimule/weather-station-general-detail-screen-0a96a2
+ *  
+ *  This is a demonstration for a coding camp to 
+ *  show the possibilities of Arduino
+ *  
+ *  Date: 6/15/21
+ */
 
+// Libraries Declaration
 #include <Elegoo_GFX.h>       // Core graphics library
 #include <Elegoo_TFTLCD.h>    // Hardware-specific library
 #include <TouchScreen.h>      // Touch Screen Library
 
-//#include <Adafruit_Sensor.h>  //Adafruit Library Sensor
-#include <dht.h>              //DTH Library
+#include <dht.h>              //DHT Library
 #include <Wire.h>
-#include "Adafruit_SI1145.h" //UV sensor
-#include <Adafruit_BMP280.h> //Temp/altitude
+#include "Adafruit_SI1145.h"  //UV sensor
+#include <Adafruit_BMP280.h>  //temperature/altitude
 
 
 // The control pins for the LCD 
-#define LCD_CS A3 // Chip Select goes to Analog 3
-#define LCD_CD A2 // Command/Data goes to Analog 2
-#define LCD_WR A1 // LCD Write goes to Analog 1
-#define LCD_RD A0 // LCD Read goes to Analog 0
+#define LCD_CS A3 
+#define LCD_CD A2
+#define LCD_WR A1 
+#define LCD_RD A0
 #define LCD_RESET A4 
 
 // Color definitions
@@ -81,13 +91,16 @@ unsigned long currentMillis;
 const unsigned long period = 2500;   //the value is a number of milliseconds
 
 int currentPage;                     //Current Page indicator  "1" First Page,  "2" Second Page
-double setTemp = 19.00;              //begining temp on boot
+double setTemperature = 19.00;              //begining temp on boot in C
 
 void setup(void) {
 
   Serial.begin(9600);
   Serial.println(F("WEATHER Station"));
-  Serial.print("TFT size is "); Serial.print(tft.width()); Serial.print("x"); Serial.println(tft.height());
+  Serial.print("TFT size is "); 
+  Serial.print(tft.width()); 
+  Serial.print("x"); 
+  Serial.println(tft.height());
   
   Serial.println(F("BMP280 test"));
   if (!bmp.begin()) {                      //Initialize BMP
@@ -102,14 +115,14 @@ void setup(void) {
   }
 
   bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
-                  Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                  Adafruit_BMP280::SAMPLING_X2,     /* temperature oversampling */
                   Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
                   Adafruit_BMP280::FILTER_X16,      /* Filtering. */
                   Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
   drawInitialScreen();
 
-  currentPage = 1;       // First Page Default
-  readSensors();      // Read DHT11 Sensor
+  currentPage = 1;         // First Page Default
+  readSensors();           // Read Sensors
   startMillis = millis();  //initial start time
 
 }
@@ -121,7 +134,7 @@ void loop() {
   if (currentMillis - startMillis >= period)
   {
     readSensors();
-    checkTemp();
+    checkTemperature();
     startMillis = currentMillis;  //IMPORTANT to save the start time of the current .
   }
 
@@ -159,18 +172,18 @@ void loop() {
     }
     else if (p.x >= 130 && p.x <= 230 && p.y >= 10 && p.y <= 50 && currentPage == 2) {    //check button for touch
       Serial.println("Minus");
-      setTemp--;
+      setTemperature--;
       readSensors();      
     }
     else if (p.x >= 130 && p.x <= 230 && p.y >= 180 && p.y <= 225 && currentPage == 2) {  //check button for touch
       Serial.println("Plus");
-      setTemp++;
+      setTemperature++;
       readSensors();     
     }
   }
 }
 
-void   drawInitialScreen() { //prints out the titles (static)
+void   drawInitialScreen() { //prints out the titles as static text
 
   tft.reset();
   getIdentifierScreen();
@@ -235,7 +248,7 @@ void thermostatScreen() { // prints out the static text on the thermostat
   
   buttons.initButton( &tft, 280, 100, 80, 80, WHITE, WHITE, DARKGREY, "+", 6 );
   buttons.drawButton(true);
-
+  //p.x >= 130 && p.x <= 230 && p.y >= 180 && p.y <= 225 && currentPage == 2
 }
 
 
@@ -265,39 +278,43 @@ void getIdentifierScreen() { //identift the right screen
 
 
 void   readSensors() {
-  DHT.read11(DHT11_PIN); //get a reading from the DHT
+  DHT.read11(DHT11_PIN); 
   delay(250);
-  checkTemp();
+  checkTemperature();
   if (currentPage == 1) {
     tft.setTextColor(WHITE);
     tft.setTextSize(2);
 
-    tft.fillRect(158, 35, 90, 22, BLACK);
+    //First temperature line
+    tft.fillRect(158, 35, 90, 22, BLACK); 
     tft.setCursor(160, 40);
     tft.print(bmp.readTemperature() - 2);
     tft.println(" C");
-    
+
+    //Second temperature line
     tft.fillRect(158, 65, 90, 22, BLACK);
     tft.setCursor(160, 65);
     tft.print(DHT.temperature);
     tft.println(" C");
-    
+
+    //Humidity line
     tft.fillRect(158, 90, 90, 22, BLACK);
     tft.setCursor(160, 90);
     tft.print(DHT.humidity);
     tft.println(" %");
 
-    
-
+    //Pressure line
     tft.fillRect(133, 115, 120, 22, BLACK);
     tft.setCursor(135, 115);
     tft.print(bmp.readPressure()/10);
     tft.println(" kPa");
 
+    //IR light line
     tft.fillRect(133, 140, 80, 22, BLACK);
     tft.setCursor(135, 140);
     tft.print(uv.readIR()/1000);
 
+    //UV Index line
     tft.fillRect(133, 165, 50, 22, BLACK);
     tft.setCursor(135, 165);
     tft.print(uv.readUV()/100);
@@ -306,21 +323,21 @@ void   readSensors() {
   else {
     tft.setTextColor(BLACK);
     tft.setTextSize(3);
-   
     tft.drawRect(93, 75, 140, 60, WHITE);
     tft.fillRect(98, 80, 130, 50, CYAN);
-   
+
+   //Thermostat line
     tft.setCursor(103, 95);
-    tft.print(setTemp);
+    tft.print(setTemperature);
     tft.println(" C");
    
   }
 }
 
-void checkTemp() { //turn on a heater if the temp falls to low
-  double avgTemp = ((bmp.readTemperature() - 2) + DHT.temperature) / 2;
+void checkTemperature() {       //turn on a heater if the temperature falls to low
+  double avgTemperature = ((bmp.readTemperature() - 2) + DHT.temperature) / 2;
 
-  if (setTemp > avgTemp) {
+  if (setTemperature > avgTemperature) {  //switch the ">" to "<" for an Air Conditioner
     digitalWrite(heater_pin, HIGH);
   }
   else {
