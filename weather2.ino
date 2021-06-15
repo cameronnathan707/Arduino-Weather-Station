@@ -91,7 +91,7 @@ unsigned long currentMillis;
 const unsigned long period = 2500;   //the value is a number of milliseconds
 
 int currentPage;                     //Current Page indicator  "1" First Page,  "2" Second Page
-double setTemperature = 19.00;              //begining temp on boot in C
+double setTemperature = 19.00;              //begining temperature on boot in C
 
 void setup(void) {
 
