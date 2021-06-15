@@ -36,5 +36,5 @@ which can be coded for a heater or air conditioner. 
 
 [GY-1145 light sensor](https://www.banggood.com/GY-1145-DC-3V-I2C-Calibrated-SI1145-Flora-UV-Index-IR-Visible-Light-Digital-Sensor-Module-p-1252374.html?utm_source=googleshopping&utm_medium=cpc_organic&gmcCountry=CA&utm_content=minha&utm_campaign=minha-ca-en-pc&currency=CAD&cur_warehouse=CN&createTmp=1&utm_source=googleshopping&utm_medium=cpc_bgs&utm_content=sandra&utm_campaign=sandra-ssc-ca-all-0304&ad_id=502489423087&gclid=CjwKCAjw_JuGBhBkEiwA1xmbRWFs41OmNANG03EjN1ckOHLTokrjAdAFdEjJWQ9OFTiujvPDVczenRoCaboQAvD_BwE) 
 
-[GY-BMP280 pressure](https://www.banggood.coGY-BMP280-3_3-High-Precision-Atmospheric-Pressure-Sensor-Module-p-1111135.html?utm_source=googleshopping&utm_medium=cpc_organic&gmcCountry=CA&utm_content=minha&utm_campaign=minha-ca-en-pc&currency=CAD&cur_warehouse=CN&createTmp=1)
+[GY-BMP280 pressure](https://www.banggood.com/GY-BMP280-3_3-High-Precision-Atmospheric-Pressure-Sensor-Module-p-1111135.html?utm_source=googleshopping&utm_medium=cpc_organic&gmcCountry=CA&utm_content=minha&utm_campaign=minha-ca-en-pc&currency=CAD&cur_warehouse=CN&createTmp=1)
 
