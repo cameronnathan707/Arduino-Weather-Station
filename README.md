@@ -1,13 +1,14 @@
 # Arduino Weather Station
 This is a project that uses multiple sensors to measure the environment around you. Some of the sensors have more data available,
 but I didn't need them for my application. It also has a thermostat that will turn a relay on and off to adjust the temperature, 
-which can be coded for a heater or air conditioner. 
+which can be coded for a heater or air conditioner. (heater and air conditioner/relay is untested use at your own risk)
 ## Getting Started
 1. Upload the .ino code to your Arduino Mega. 
 2. Attach the DH11.
 3. Attach the GY1145 light sensor.
 4. Attach the GY-BMp 280.
-5. Connect the 2.8" tft screen shield to the Mega.
+5. Attach the Relay
+6. Connect the 2.8" tft screen shield to the Mega.
 
 
 ## Troubleshooting
